@@ -145,6 +145,7 @@ namespace ProyectoFinal
 
                     break;
                 case 2:
+                    MenuGestionCuentaCajero();
                     break;
                 case 3:
                     break;
@@ -256,6 +257,40 @@ namespace ProyectoFinal
             Console.WriteLine("--------------------Menú--------------------\n1.Crear Ruta                      2.Editar Ruta\n3.Ver Lista de rutas          4.Asignar Conductore a ruta\n5.Salir");
         }
 
+        //---------GESTION CUENTA CAJERO---------
+        static void MenuGestionCuentaCajero()
+        {
+            Console.WriteLine("--------------------Menú--------------------\n1.Editar Cajero                      2.Crear Cajero \n3.Ver Lista de Cajeros          4.Asignar Conductore a ruta\n5.Salir");
+        }
 
+        static void OpcionesCuentaCajero(int opciones)//Módulo encargado de llamar a los menú de gestión de usuarioy contraseña.
+        {
+            
+            
+                switch (opciones)
+                {
+
+                    case 1:
+                        EditarCajero();
+                        break;
+                    case 2:
+                        EditarContra();
+                        break;
+                    case 3:
+
+                    break;
+                    case 4:
+                         Console.Clear();
+                    MenuCajero();
+                    OpcionesCajero(CapturarOpcion());
+                    break;
+
+            }
+        }
+
+            static void EditarCajero()
+            {
+            Console.WriteLine();
+            }
     }
 }
