@@ -10,6 +10,7 @@ namespace ProyectoFinal
         static string contraAd = "123";
         static string usuarAd = "Admin";
         static string rol;
+        static int oportunidades;
         static void Main(string[] args)
         {
 
@@ -24,10 +25,10 @@ namespace ProyectoFinal
 
             string usuar;
             string contra;
-            int oportunidades = 2;//Solo 2 porque el intento inicial no lo cuenta, siendo 3 intentos en total
+            oportunidades = 2;//Solo 2 porque el intento inicial no lo cuenta, siendo 3 intentos en total
 
             Console.WriteLine("ingrese su rol, en minúsculas");
-            rol = Console.ReadLine();
+            rol = Console.ReadLine();//No ingresar como cajero hasta que sean creados los cajeros
 
             while (rol != "administrador" && rol!= "cajero")
             {
@@ -86,7 +87,7 @@ namespace ProyectoFinal
             }
             if (rol == "cajero")
             {
-                if (contra == contraCa[numCaj - 1] && usuar == usuarCa[numCaj - 1])// El cajero pondrá su posición en el arrglo, no el indice, por lo que hay que restarle 1
+                if (contra == contraCa[numCaj - 1] && usuar == usuarCa[numCaj - 1])// El cajero pondrá su posición en el arreglo, no el indice, por lo que hay que restarle 1
                 {
                     MenuCajero();
                     OpcionesCajero(CapturarOpcion());
@@ -113,10 +114,10 @@ namespace ProyectoFinal
                         Console.WriteLine("Ha sobrepasado el limite de errores, comuniquese con ferney.chica@upb.edu.co para soporte técnico");
                     }
 
-                    if (contra == contraAd && usuar == usuarAd)
+                    if (contra == contraCa[numCaj - 1] && usuar == usuarCa[numCaj - 1])
                     {
-                        MenuAdministrador();
-                        OpcionesAdministrador(CapturarOpcion());
+                        MenuCajero();
+                        OpcionesCajero(CapturarOpcion());
                     }
 
                 }
@@ -148,14 +149,17 @@ namespace ProyectoFinal
                 case 1:
                     MenuEditarUsuarContra();
                     OpcionesEditarUsuarContra(CapturarOpcion());
-
-
-
                     break;
                 case 2:
                     MenuGestionCuentaCajero();
+                    SwitchGestionCuentaCajeros(CapturarOpcion());
                     break;
                 case 3:
+                    MenuGestionConductores();
+                    SwitchGestionConductores(CapturarOpcion());
+                    break;
+                case 4:
+                    Autenticacion();
                     break;
             }
         }
@@ -164,24 +168,22 @@ namespace ProyectoFinal
         //---------Gestion cuenta cajero---------
         static void MenuGestionCuentaCajero()
         {
-            Console.WriteLine("--------------------Menú--------------------\n1.Editar Cajero                      2.Crear Cajero \n3.Ver Lista de Cajeros          4.Asignar Conductore a ruta\n5.Salir");
+            Console.WriteLine("--------------------Menú--------------------\n1.Crear Cajero                      2.Editar Cajero \n3.Ver Lista de Cajeros          4.Salir");
         }
-
-        static void OpcionesCuentaCajero(int opciones)//Módulo encargado de llamar a los menú de gestión de usuarioy contraseña.
+        static void SwitchGestionCuentaCajeros(int opciones)
         {
-
-
             switch (opciones)
             {
 
                 case 1:
-                    EditarCajero();
+                    CrearCajero();
+
                     break;
                 case 2:
-                    EditarContra();
+                    EditarCajero();
                     break;
                 case 3:
-
+                    VerListaCajeros();
                     break;
                 case 4:
                     Console.Clear();
@@ -190,12 +192,81 @@ namespace ProyectoFinal
                     break;
 
             }
+
         }
+        static void CrearCajero()//Crea un usuario y contraseña por defecto para cada nuevo cajero
+        {
+            for(int i =0; i < 15; i++)
+            {
+                usuarCa[i] = $"Cajero{i + 1}";
+                contraCa[i] = "456";
+            }
+            Console.WriteLine("Se han creado los 15 cajeros");
+            Console.WriteLine("Persione 1 para salir");
+            switch (CapturarOpcion())
+            {
+                case 1:
+                    MenuGestionCuentaCajero();
+                    SwitchGestionCuentaCajeros(CapturarOpcion());
+                    break;
+            }
+        }
+        static void EditarCajero()//Permite editar tanto el usuario como la contraseña
+        {
+            Console.WriteLine("Ingrese el numero de cajero que quiere editar");
+            numCaj = int.Parse(Console.ReadLine());
+            Console.WriteLine("Ingrese el nuevo usuario");
+            usuarCa[numCaj-1] = Console.ReadLine();//-1 porque el usuario pone la posicion, mas no el indice
+            Console.WriteLine("Ingrese la nueva contraseña");
+            contraCa[numCaj-1] = Console.ReadLine();
+            Console.WriteLine("Persione 1 para salir");
+            switch (CapturarOpcion())
+            {
+                case 1:
+                    MenuGestionCuentaCajero();
+                    SwitchGestionCuentaCajeros(CapturarOpcion());
+                    break;
+            }
+        }
+
+        static void VerListaCajeros()
+        {
+     
+            for(int i = 0; i < 15; i++)
+            {
+                Console.Write($"Usuario:{usuarCa[i]} Contraseña:{contraCa[i]}");
+                Console.WriteLine();
+            }
+            Console.WriteLine("Persione 1 para salir");
+            switch (CapturarOpcion())
+            {
+                case 1:
+                    MenuGestionCuentaCajero();
+                    SwitchGestionCuentaCajeros(CapturarOpcion());
+                    break;
+            }
+        }
+
+        
+
+
+        //-------------Gestión de conductores----------------
+        static void MenuGestionConductores()
+        {
+            Console.WriteLine("--------------------Menú--------------------\n1.Crear Conductor                     2.Editar Conductor \n3.Asignar ruta a un conductor                    4.Ver lista de rutas de un Conductor\n5.Ver Lista de Conductores                    6.Salir");
+        }
+
+        static void SwitchGestionConductores(int opciones)
+        {
+
+        }
+
+        
 
         //-------------MENÚ CAJERO---------------------------
         static void MenuCajero()
         {
-            Console.WriteLine("--------------------Menú--------------------\n1.Gestión cuenta cajero                     2.Gestión de rutas\n3.Realizar venta");
+            Console.WriteLine("--------------------Menú--------------------\n1.Gestión cuenta cajero                     2.Gestión de rutas\n3.Realizar venta                     4.Salir");
         }
         static void OpcionesCajero(int opciones)
         {
@@ -209,8 +280,10 @@ namespace ProyectoFinal
                     break;
                 case 2:
                     MenuGestRutas();
+                    SwitchGestionRutas(CapturarOpcion());
                     break;
                 case 3:
+                    PasosRealizarVenta();
                     break;
                 case 4:
                     Autenticacion();
@@ -224,10 +297,46 @@ namespace ProyectoFinal
             Console.WriteLine("--------------------Menú--------------------\n1.Crear Ruta                      2.Editar Ruta\n3.Ver Lista de rutas          4.Asignar Conductore a ruta\n5.Salir");
         }
 
-        static void SwitchGestionRutas()
+        static void SwitchGestionRutas(int opciones)
         {
 
+            switch (opciones)
+            {
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    MenuCajero();
+                    OpcionesCajero(CapturarOpcion());
+                    break;
+            }
         }
+        //--------Pasos automaticos hacia realizar venta---------
+        static void PasosRealizarVenta()
+        {
+            string nombre;
+            Console.WriteLine("--------------------Pasos Venta--------------------\n1.Ingresar Nombre del Comprador                      2.Seleccionar una Ruta\n3.Ingresar Cantidad de Tiquetes          4.Imprimir el tiquete\n5.Volver al menu cajero");
+            Console.WriteLine("Ingresar el nombre del comprador");
+            nombre = Console.ReadLine();
+            Console.WriteLine("Seleccione una ruta");
+            Console.WriteLine("Ingresar la cantidad de tiquetes");
+            Console.WriteLine("Tiqute impreso");
+            MenuCajero();
+            OpcionesCajero(CapturarOpcion());
+
+        }
+
+        
+
+
+
 
         //---EDITAR USUARIO Y CONTRASEÑA (SIRVE TANTO PARA ADMINISTRADOR COMO PARA CAJERO)-----
         static void MenuEditarUsuarContra()
@@ -282,16 +391,26 @@ namespace ProyectoFinal
                 Console.WriteLine("Introduzca su nuevo usuario");
                 usuarAd= Console.ReadLine();
                 Console.WriteLine("Persione 1 para salir");
-                switch (CapturarOpcion())
-                {
-                    case 1:
-                        MenuEditarUsuarContra();
-                        OpcionesEditarUsuarContra(CapturarOpcion());
-                    break;
-                }
+               
             }
-            
-            
+            if (rol == "cajero")
+            {
+                Console.WriteLine("Introduzca su nuevo usuario");
+                usuarCa[numCaj - 1] = Console.ReadLine();
+                
+                
+            }
+
+            Console.WriteLine("Persione 1 para salir");
+            switch (CapturarOpcion())
+            {
+                case 1:
+                    MenuEditarUsuarContra();
+                    OpcionesEditarUsuarContra(CapturarOpcion());
+                    break;
+            }
+
+
         }
         static void EditarContra()
         {
@@ -299,6 +418,22 @@ namespace ProyectoFinal
             {
                 Console.WriteLine("Introduzca su nueva contraseña");
                 contraAd = Console.ReadLine();
+                
+            }
+            if (rol == "cajero")
+            {
+                Console.WriteLine("Introduzca su nueva contraseña");
+                contraCa[numCaj-1] = Console.ReadLine();
+
+            }
+
+            Console.WriteLine("Persione 1 para salir");
+            switch (CapturarOpcion())
+            {
+                case 1:
+                    MenuEditarUsuarContra();
+                    OpcionesEditarUsuarContra(CapturarOpcion());
+                    break;
             }
         }
 
@@ -306,9 +441,6 @@ namespace ProyectoFinal
         
 
 
-            static void EditarCajero()
-            {
-            Console.WriteLine();
-            }
+            
     }
 }
